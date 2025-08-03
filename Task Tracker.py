@@ -53,7 +53,7 @@ class Task:
         self._updatedAt = updatedAt
 
     def is_valid(self):
-        pass
+        return True
 
 
 
@@ -67,7 +67,10 @@ class TaskTracker:
                 raise ValueError(f'Element at {tasks.index(task)} position is not an instance of Task class')
         self.tasks = tasks
     def __repr__(self):
-        return f'Stored tasks: {self.tasks}'
+        result = ''
+        for i, task in enumerate(self.tasks):
+            result += f'Task #{i+1}: {task}'
+        return result
 
     def add_task(self, task: Task):
         if task.is_valid():
@@ -75,7 +78,41 @@ class TaskTracker:
         else:
             raise TaskError('Task is not valid')
         return self
-
+    def update_task(self, task_id: int):
+        target_task = next((task for task in self.tasks if task.get_id() == task_id), None)
+        if target_task:
+            while True:
+                print('Select parameter to update:\n'
+                      'Description - 1\n'
+                      'Status - 2\n'
+                      'To exit type \'q\'')
+                user_input = input(':')
+                match user_input:
+                    case '1':
+                        try:
+                            new_description = input('Input new description for task: ')
+                            if new_description:
+                                target_task.set_description(new_description)
+                            else:
+                                raise TaskError('Task description can not be empty')
+                        except TaskError as error:
+                            print(f'Error message: {error}')
+                    case '2':
+                        try:
+                            new_status = input('Input new status for task: ')
+                            if new_status in STATUS_LIST:
+                                target_task.set_status(new_status)
+                            else:
+                                raise TaskError('Status must be a value from STATUS_LIST:\n'
+                                                f'{STATUS_LIST}')
+                        except TaskError as error:
+                            print(f'Error message: {error}')
+                    case 'q':
+                        print(f'Done updating task {target_task.get_id()}')
+                        break
+                    case _:
+                        print('Invalid input')
+        else: print('No task to update')
 
 
 def main() -> int:
