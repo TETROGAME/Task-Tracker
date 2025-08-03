@@ -23,9 +23,38 @@ class Task:
     def __repr__(self):
         return (f'ID: {self._id}\nDescription: {self._description}\n'
                 f'Status: {self._status}\nCreated at: {self._cratedAt}\n'
-                f'Updated at: {self._updatedAt}')
+                f'Updated at: {self._updatedAt}\n')
+
+    def get_id(self):
+        return self._id
+
+    def get_description(self):
+        return self._description
+
+    def get_status(self):
+        return self._status
+
+    def get_cratedAt(self):
+        return self._cratedAt
+
+    def get_updatedAt(self):
+        return self._updatedAt
+
+    def set_description(self, description: str):
+        self._description = description
+
+    def set_status(self, status: str):
+        self._status = status
+
+    def set_cratedAt(self, cratedAt: datetime):
+        self._cratedAt = cratedAt
+
+    def set_updatedAt(self, updatedAt: datetime):
+        self._updatedAt = updatedAt
+
     def is_valid(self):
         pass
+
 
 
 class TaskTracker:
@@ -41,9 +70,12 @@ class TaskTracker:
         return f'Stored tasks: {self.tasks}'
 
     def add_task(self, task: Task):
-        if task.is_valid(): self.tasks.append(task)
-        else: raise TaskError('Task is not valid')
+        if task.is_valid():
+            self.tasks.append(task)
+        else:
+            raise TaskError('Task is not valid')
         return self
+
 
 
 def main() -> int:
