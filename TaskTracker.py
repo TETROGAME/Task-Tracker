@@ -100,7 +100,7 @@ class TaskTracker:
                 if not id_done: print('ID - 1')
                 if not description_done: print('Description - 2')
                 if not status_done: print('Status - 3')
-                user_input = input(':')
+                user_input = input('> ')
                 match user_input:
                     case '1':
                         try:
@@ -124,7 +124,6 @@ class TaskTracker:
             self._tasks.append(new_task)
         else:
             self._tasks.append(task)
-
     def update_task(self, task_id: int):
         target_task = next((task for task in self._tasks if task.get_id() == task_id), None)
         if target_task:
@@ -133,7 +132,7 @@ class TaskTracker:
                       'Description - 1\n'
                       'Status - 2\n'
                       'To exit type \'q\'')
-                user_input = input(':')
+                user_input = input('> ')
                 match user_input:
                     case '1':
                         new_description = input('Input new description for task: ')
@@ -147,5 +146,14 @@ class TaskTracker:
                     case _:
                         print('Invalid input')
         else: print('No task to update')
+    def delete_task(self, task_id: int):
+        target_task = next((task for task in self._tasks if task.get_id() == task_id), None)
+        try:
+            if target_task is None:
+                raise TaskError(f'Task with id {task_id} not found')
+            else:
+                self._tasks.remove(target_task)
+        except TaskError as error:
+            print(f'TaskError: {error}')
 
 
