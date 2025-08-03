@@ -1,3 +1,4 @@
+from ctypes.wintypes import HTASK
 from datetime import datetime
 
 STATUS_LIST = ('New', 'In progress', 'Done')
@@ -27,16 +28,12 @@ class Task:
 
     def get_id(self):
         return self._id
-
     def get_description(self):
         return self._description
-
     def get_status(self):
         return self._status
-
     def get_cratedAt(self):
         return self._cratedAt
-
     def get_updatedAt(self):
         return self._updatedAt
 
@@ -52,7 +49,6 @@ class Task:
         except TaskError as error:
             print(f'TaskError: {error}')
             return False
-
     def set_status(self, status: str) -> bool:
         try:
             if status in STATUS_LIST:
@@ -63,15 +59,10 @@ class Task:
         except TaskError as error:
             print(f'TaskError: {error}')
             return False
-
     def set_cratedAt(self, cratedAt: datetime):
         self._cratedAt = cratedAt
-
     def set_updatedAt(self, updatedAt: datetime):
         self._updatedAt = updatedAt
-
-    # def is_valid(self):
-    #     return True
 
 class TaskTracker:
     _tasks: list[Task]
@@ -87,6 +78,7 @@ class TaskTracker:
         for i, task in enumerate(self._tasks):
             result += f'Task #{i+1}: {task}'
         return result
+
     def add_task(self, task: Task = None):
         if task is None:
             id_done = False
@@ -155,5 +147,24 @@ class TaskTracker:
                 self._tasks.remove(target_task)
         except TaskError as error:
             print(f'TaskError: {error}')
+
+    def get_in_progress_tasks(self) -> list[Task]:
+        in_progress_tasks = [task for task in self._tasks if task.get_status() == 'In progress']
+        if in_progress_tasks is None:
+            return []
+        else:
+            return in_progress_tasks
+    def get_done_tasks(self) -> list[Task]:
+        done_tasks = [task for task in self._tasks if task.get_status() == 'Done']
+        if done_tasks is None:
+            return []
+        else:
+            return done_tasks
+    def get_not_done_tasks(self) -> list[Task]:
+        not_done_tasks = [task for task in self._tasks if task.get_status() != 'Done']
+        if not_done_tasks is None:
+            return []
+        else:
+            return not_done_tasks
 
 
