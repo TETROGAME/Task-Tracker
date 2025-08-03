@@ -33,6 +33,9 @@ class TaskTracker:
     def __init__(self, tasks: list[Task] = None):
         if tasks is None:
             tasks = []
+        for task in tasks:
+            if not isinstance(task, Task):
+                raise ValueError(f'Element at {tasks.index(task)} position is not an instance of Task class')
         self.tasks = tasks
     def __repr__(self):
         return f'Stored tasks: {self.tasks}'
