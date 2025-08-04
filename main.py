@@ -1,41 +1,51 @@
 from TaskTracker import *
-
 def main() -> int:
+    tracker = TaskTracker()
     print('Welcome to Task Tracker, a simple way to manage your tasks using CLI!')
     while True:
         print('Available options:\n'
-              '1. Print existing tasks\n'
-              '2. Add a new task\n'
-              '3. Edit an existing task\n'
-              '4. Delete an existing task\n'
-              '5. Exit\n\n'
-              'To quit without saving type \'q\'\n'
-              'To save and quit type \'sq\'\n'
-              'To save type \'s\'\n'
-              'To load type \'l\'\n')
+              '\'1\' Print existing tasks\n'
+              '\'2\' Add a new task\n'
+              '\'3\' Edit an existing task\n'
+              '\'4\' Delete an existing task\n'
+              '\'5\' Exit\n'
+              '\'sq\' - save and quit\n'
+              '\'q\' - quit\n'
+              '\'s\' - save\n'
+              '\'l\' - load\n')
+
         user_input = input('> ')
         match user_input:
             case '1':
-                pass
+                if tracker.get_tasks():
+                    print('Tasks list: ', tracker, '\n')
+                else:
+                    print('No tasks saved\n')
             case '2':
-                pass
+                tracker.add_task()
             case '3':
-                pass
+                user_input = input('Enter task ID: ')
+                try:
+                    tracker.update_task(int(user_input))
+                except ValueError as error:
+                    print(error)
             case '4':
                 pass
             case '5':
                 pass
             case 'q':
-                pass
+                print('Quitting...')
+                exit(0)
             case 'sq':
-                pass
+                tracker.save()
+                print('Quitting...')
+                break
             case 's':
-                pass
+                tracker.save()
             case 'l':
-                pass
+                tracker.load()
             case _:
                 print('Invalid input. Please try again.')
-                break
     return 0
 
 
