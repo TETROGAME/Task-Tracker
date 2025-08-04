@@ -1,5 +1,6 @@
-from ctypes.wintypes import HTASK
 from datetime import datetime
+from tkinter import Tk, filedialog
+import json
 
 STATUS_LIST = ('New', 'In progress', 'Done')
 
@@ -64,6 +65,15 @@ class Task:
     def set_updatedAt(self, updatedAt: datetime):
         self._updatedAt = updatedAt
 
+    def to_dictionary(self):
+        return {'id': self._id,
+                'description': self._description,
+                'status': self._status,
+                'cratedAt': self._cratedAt.isoformat(),
+                'updatedAt': self._updatedAt.isoformat()
+                }
+
+
 class TaskTracker:
     _tasks: list[Task]
     def __init__(self, tasks: list[Task] = None):
@@ -78,6 +88,9 @@ class TaskTracker:
         for i, task in enumerate(self._tasks):
             result += f'Task #{i+1}: {task}'
         return result
+
+    def get_tasks(self) -> list[Task]:
+        return self._tasks
 
     def add_task(self, task: Task = None):
         if task is None:
@@ -166,5 +179,23 @@ class TaskTracker:
             return []
         else:
             return not_done_tasks
+
+    def save(self):
+        root = Tk()
+        root.withdraw()
+        file = filedialog.asksaveasfilename(
+            defaultextension='.json',
+            filetypes=[('JSON Files', '*.json')],
+            title='Save tasks'
+        )
+        root.destroy()
+        if not file:
+            print('No file selected')
+            return
+        with open(file, 'w') as f:
+            json.dump([task.to_dictionary() for task in self._tasks], f,
+                      indent=4, separators=(',', ': '))
+    def load(self):
+        pass
 
 
