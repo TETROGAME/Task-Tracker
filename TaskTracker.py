@@ -74,32 +74,16 @@ class Task:
                 }
 
 def as_task(jdict):
-    valid = True
-    if 'id' in jdict:
-        task_id = jdict['id']
-    else:
-        valid = False
-    if 'description' in jdict:
-        task_description = jdict['description']
-    else:
-        valid = False
-    if 'status' in jdict:
-        task_status = jdict['status']
-    else:
-        valid = False
-    if 'createdAt' in jdict:
-        task_createdAt = datetime.fromisoformat(jdict['createdAt'])
-    else:
-        valid = False
-    if 'updatedAt' in jdict:
-        task_updatedAt = datetime.fromisoformat(jdict['updatedAt'])
-    else:
-        valid = False
-
-    if valid:
-        return Task(task_id, task_description, task_status, task_createdAt,task_updatedAt)
-    else:
-        return Task()
+    required_keys = ['id', 'description', 'status', 'createdAt', 'updatedAt']
+    if all(key in required_keys for key in jdict):
+        return Task(
+            _id=jdict['id'],
+            _description=jdict['description'],
+            _status=jdict['status'],
+            _createdAt=datetime.fromisoformat(jdict['createdAt']),
+            _updatedAt=datetime.fromisoformat(jdict['updatedAt'])
+        )
+    return Task()
 
 
 class TaskTracker:
