@@ -18,7 +18,7 @@ def main() -> int:
         match user_input:
             case '1':
                 if tracker.get_tasks():
-                    print('Tasks list: ', tracker, '\n')
+                    print(f'Tasks list:\n{tracker}\n')
                 else:
                     print('No tasks saved\n')
             case '2':
