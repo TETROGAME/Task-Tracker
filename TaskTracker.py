@@ -187,8 +187,10 @@ class TaskTracker:
                 raise TaskError(f'Task with id {task_id} not found')
             else:
                 self._tasks.remove(target_task)
+                return True
         except TaskError as error:
             print(f'TaskError: {error}')
+            return False
 
     def get_in_progress_tasks(self) -> list[Task]:
         in_progress_tasks = [task for task in self._tasks if task.get_status() == 'In progress']
