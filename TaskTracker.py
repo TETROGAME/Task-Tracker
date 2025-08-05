@@ -75,7 +75,7 @@ class Task:
 
 def as_task(jdict):
     required_keys = ['id', 'description', 'status', 'createdAt', 'updatedAt']
-    if all(key in required_keys for key in jdict):
+    if all(key in jdict for key in required_keys):
         return Task(
             _id=jdict['id'],
             _description=jdict['description'],
