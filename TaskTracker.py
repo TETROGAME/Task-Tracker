@@ -12,19 +12,19 @@ class Task:
     _id: int
     _description: str
     _status: str
-    _cratedAt: datetime
+    _createdAt: datetime
     _updatedAt: datetime
     def __init__(self, _id: int = 0, _description: str = '', _status: str = STATUS_LIST[0]
-                 , _cratedAt: datetime = datetime.date(datetime.now())
-                 , _updatedAt: datetime = datetime.date(datetime.now())):
+                 , _createdAt: datetime = datetime.now().replace(microsecond=0)
+                 , _updatedAt: datetime = datetime.now().replace(microsecond=0)):
         self._id = _id
         self._description = _description
         self._status = _status
-        self._cratedAt = _cratedAt
+        self._createdAt = _createdAt
         self._updatedAt = _updatedAt
     def __repr__(self):
         return (f'ID: {self._id}\nDescription: {self._description}\n'
-                f'Status: {self._status}\nCreated at: {self._cratedAt}\n'
+                f'Status: {self._status}\nCreated at: {self._createdAt}\n'
                 f'Updated at: {self._updatedAt}\n')
 
     def get_id(self):
@@ -33,8 +33,8 @@ class Task:
         return self._description
     def get_status(self):
         return self._status
-    def get_cratedAt(self):
-        return self._cratedAt
+    def get_createdAt(self):
+        return self._createdAt
     def get_updatedAt(self):
         return self._updatedAt
 
@@ -60,8 +60,8 @@ class Task:
         except TaskError as error:
             print(f'TaskError: {error}')
             return False
-    def set_cratedAt(self, cratedAt: datetime):
-        self._cratedAt = cratedAt
+    def set_createdAt(self, createdAt: datetime):
+        self._createdAt = createdAt
     def set_updatedAt(self, updatedAt: datetime):
         self._updatedAt = updatedAt
 
@@ -69,7 +69,7 @@ class Task:
         return {'id': self._id,
                 'description': self._description,
                 'status': self._status,
-                'cratedAt': self._cratedAt.isoformat(),
+                'createdAt': self._createdAt.isoformat(),
                 'updatedAt': self._updatedAt.isoformat()
                 }
 
@@ -87,17 +87,17 @@ def as_task(jdict):
         task_status = jdict['status']
     else:
         valid = False
-    if 'cratedAt' in jdict:
-        task_cratedAt = jdict['cratedAt']
+    if 'createdAt' in jdict:
+        task_createdAt = datetime.fromisoformat(jdict['createdAt'])
     else:
         valid = False
     if 'updatedAt' in jdict:
-        task_updatedAt = jdict['updatedAt']
+        task_updatedAt = datetime.fromisoformat(jdict['updatedAt'])
     else:
         valid = False
 
     if valid:
-        return Task(task_id, task_description, task_status, task_cratedAt,task_updatedAt)
+        return Task(task_id, task_description, task_status, task_createdAt,task_updatedAt)
     else:
         return Task()
 
@@ -174,6 +174,7 @@ class TaskTracker:
                         new_status = input('Input new status for task: ')
                         target_task.set_status(new_status)
                     case 'q':
+                        target_task.set_updatedAt(datetime.now().replace(microsecond=0))
                         print(f'Done updating task with id: {target_task.get_id()}')
                         break
                     case _:
