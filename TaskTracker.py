@@ -117,6 +117,7 @@ class TaskTracker:
                 if not id_done: print('ID - 1')
                 if not description_done: print('Description - 2')
                 if not status_done: print('Status - 3')
+                print('To escape type \'q\'')
                 user_input = input('> ')
                 match user_input:
                     case '1':
@@ -139,6 +140,8 @@ class TaskTracker:
                             status_done = True
                         else:
                             pass
+                    case 'q':
+                        return
                     case _:
                         print('Invalid input')
             self._tasks.append(new_task)
