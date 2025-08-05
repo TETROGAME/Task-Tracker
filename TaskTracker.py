@@ -73,6 +73,34 @@ class Task:
                 'updatedAt': self._updatedAt.isoformat()
                 }
 
+def as_task(jdict):
+    valid = True
+    if 'id' in jdict:
+        task_id = jdict['id']
+    else:
+        valid = False
+    if 'description' in jdict:
+        task_description = jdict['description']
+    else:
+        valid = False
+    if 'status' in jdict:
+        task_status = jdict['status']
+    else:
+        valid = False
+    if 'cratedAt' in jdict:
+        task_cratedAt = jdict['cratedAt']
+    else:
+        valid = False
+    if 'updatedAt' in jdict:
+        task_updatedAt = jdict['updatedAt']
+    else:
+        valid = False
+
+    if valid:
+        return Task(task_id, task_description, task_status, task_cratedAt,task_updatedAt)
+    else:
+        return Task()
+
 
 class TaskTracker:
     _tasks: list[Task]
@@ -86,7 +114,7 @@ class TaskTracker:
     def __repr__(self):
         result = ''
         for i, task in enumerate(self._tasks):
-            result += f'Task #{i+1}: {task}'
+            result += f'Task #{i+1}:\n{task}\n'
         return result
 
     def get_tasks(self) -> list[Task]:
@@ -196,6 +224,19 @@ class TaskTracker:
             json.dump([task.to_dictionary() for task in self._tasks], f,
                       indent=4, separators=(',', ': '))
     def load(self):
-        pass
+        root = Tk()
+        root.withdraw()
+        file = filedialog.askopenfilename(
+            defaultextension='.json',
+            filetypes=[('JSON Files', '*.json')],
+            title='Load tasks'
+        )
+        root.destroy()
+        if not file:
+            print('No file selected')
+            return
+        with open(file, 'r') as jsonfile:
+            self._tasks = (json.load(jsonfile, object_hook=as_task))
+
 
 
