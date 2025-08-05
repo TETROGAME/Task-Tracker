@@ -56,7 +56,7 @@ class Task:
                 self._status = status
                 return True
             else:
-                raise TaskError('Status must be value from STATUS_LIST')
+                raise TaskError(f'Status must be value from STATUS_LIST: {STATUS_LIST}')
         except TaskError as error:
             print(f'TaskError: {error}')
             return False
