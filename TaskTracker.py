@@ -137,11 +137,14 @@ class TaskTracker:
                 match user_input:
                     case '1':
                         try:
-                            new_task.set_id(int(input('Input ID: ')))
-                            id_done = True
+                            converted_id = int(input('Input ID: '))
+                            if converted_id in [task.get_id() for task in self._tasks if task.get_id() == converted_id]:
+                                print(f'Task with ID: {converted_id} already exists')
+                            else:
+                                new_task.set_id(converted_id)
+                                id_done = True
                         except ValueError:
                             print('ID must be positive integer')
-                            pass
                     case '2':
                         if new_task.set_description(input('Input Description: ')):
                             description_done = True
