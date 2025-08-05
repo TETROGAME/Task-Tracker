@@ -8,7 +8,6 @@ def main() -> int:
               '\'2\' Add a new task\n'
               '\'3\' Edit an existing task\n'
               '\'4\' Delete an existing task\n'
-              '\'5\' Exit\n'
               '\'sq\' - save and quit\n'
               '\'q\' - quit\n'
               '\'s\' - save\n'
@@ -30,9 +29,11 @@ def main() -> int:
                 except ValueError as error:
                     print(error)
             case '4':
-                pass
-            case '5':
-                pass
+                user_input = input('Enter new task ID: ')
+                try:
+                    tracker.delete_task(int(user_input))
+                except ValueError as error:
+                    print(error)
             case 'q':
                 print('Quitting...')
                 exit(0)
