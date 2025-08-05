@@ -27,18 +27,18 @@ class Task:
                 f'Status: {self._status}\nCreated at: {self._createdAt}\n'
                 f'Updated at: {self._updatedAt}\n')
 
-    def get_id(self):
+    def get_id(self) -> int:
         return self._id
-    def get_description(self):
+    def get_description(self) -> str:
         return self._description
-    def get_status(self):
+    def get_status(self) -> str:
         return self._status
-    def get_createdAt(self):
+    def get_createdAt(self) -> datetime:
         return self._createdAt
-    def get_updatedAt(self):
+    def get_updatedAt(self) -> datetime:
         return self._updatedAt
 
-    def set_id(self, _id: int):
+    def set_id(self, _id: int) -> None:
         self._id = _id
     def set_description(self, description: str) -> bool:
         try:
@@ -60,12 +60,12 @@ class Task:
         except TaskError as error:
             print(f'TaskError: {error}')
             return False
-    def set_createdAt(self, createdAt: datetime):
+    def set_createdAt(self, createdAt: datetime) -> None:
         self._createdAt = createdAt
-    def set_updatedAt(self, updatedAt: datetime):
+    def set_updatedAt(self, updatedAt: datetime) -> None:
         self._updatedAt = updatedAt
 
-    def to_dictionary(self):
+    def to_dictionary(self) -> dict:
         return {'id': self._id,
                 'description': self._description,
                 'status': self._status,
@@ -73,7 +73,8 @@ class Task:
                 'updatedAt': self._updatedAt.isoformat()
                 }
 
-def as_task(jdict):
+# as_task function is introduced as object_hook function for load method of TaskTracker class
+def as_task(jdict: dict) -> Task:
     required_keys = ['id', 'description', 'status', 'createdAt', 'updatedAt']
     if all(key in jdict for key in required_keys):
         return Task(
@@ -84,7 +85,6 @@ def as_task(jdict):
             _updatedAt=datetime.fromisoformat(jdict['updatedAt'])
         )
     return Task()
-
 
 class TaskTracker:
     _tasks: list[Task]
@@ -104,7 +104,7 @@ class TaskTracker:
     def get_tasks(self) -> list[Task]:
         return self._tasks
 
-    def add_task(self, task: Task = None):
+    def add_task(self, task: Task = None) -> None:
         if task is None:
             id_done = False
             description_done = False
@@ -147,7 +147,7 @@ class TaskTracker:
             self._tasks.append(new_task)
         else:
             self._tasks.append(task)
-    def update_task(self, task_id: int):
+    def update_task(self, task_id: int) -> None:
         target_task = next((task for task in self._tasks if task.get_id() == task_id), None)
         if target_task:
             while True:
@@ -170,7 +170,7 @@ class TaskTracker:
                     case _:
                         print('Invalid input')
         else: print('No task to update')
-    def delete_task(self, task_id: int):
+    def delete_task(self, task_id: int) -> bool:
         target_task = next((task for task in self._tasks if task.get_id() == task_id), None)
         try:
             if target_task is None:
@@ -201,7 +201,7 @@ class TaskTracker:
         else:
             return not_done_tasks
 
-    def save(self):
+    def save(self) -> None:
         root = Tk()
         root.withdraw()
         file = filedialog.asksaveasfilename(
@@ -216,7 +216,7 @@ class TaskTracker:
         with open(file, 'w') as f:
             json.dump([task.to_dictionary() for task in self._tasks], f,
                       indent=4, separators=(',', ': '))
-    def load(self):
+    def load(self) -> None:
         root = Tk()
         root.withdraw()
         file = filedialog.askopenfilename(
